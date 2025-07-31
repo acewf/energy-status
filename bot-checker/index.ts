@@ -21,7 +21,7 @@ const checkStatus = async () => {
     clearTimeout(timeID);
 
     try {
-        const req = await fetch('http://localhost:3000/api/status');
+        const req = await fetch(`${apiUrl}/api/status`);
         if (!previousStatus) {
             bot.sendMessage(chatId, `Energy is ON!`);
         }
