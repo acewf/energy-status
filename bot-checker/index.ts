@@ -22,12 +22,16 @@ const checkStatus = async () => {
 
     try {
         const req = await fetch(`${apiUrl}/api/status`);
-        if (!previousStatus) {
+        if (!req.ok && previousStatus) {
+            bot.sendMessage(chatId, `Energy is OFF!`);
+            previousStatus = false; // If the request fails, assume "OFF"
+        } else if (!previousStatus && req.ok) {
             bot.sendMessage(chatId, `Energy is ON!`);
+            previousStatus = req.status === 200;
         }
-        previousStatus = req.status === 200; // Assuming a 200 status means "ON"
     } catch (error) {
         if (previousStatus) {
+            console.log('SEND OFF MESSAGE');
             bot.sendMessage(chatId, `Energy is OFF!`);
         }
         previousStatus = false; // If there's an error, assume "OFF"
